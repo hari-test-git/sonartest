@@ -2,11 +2,12 @@ name: 'CI'
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [ "main" ]
+
   pull_request:
-    branches:
-      - '**'
+    types:
+      - opened
+      - synchronize
 
 jobs:
   build:
@@ -16,4 +17,4 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Run Hello World
-        run: echo "Hello, World!"
+      run: echo "Hello, World!"
