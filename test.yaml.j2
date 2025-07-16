@@ -2,11 +2,6 @@ name: 'Test Folder Strip with Loop'
 
 on:
   workflow_dispatch:
-    inputs:
-      folders:
-        description: 'Comma-separated list of folders'
-        required: true
-        default: 'src/python/one, python/scripts/two, tests'
 
 jobs:
   folder-loop-test:
@@ -16,8 +11,14 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v4
 
-{% for folder in folders.split(',') %}
-      - name: 'Hello-{{ folder.strip() }}'
+
+{% if folders %}
+{% for folder in folders.split(',') if folder.strip() %}
+      - name: 'Echo folder name: {{ folder.strip() }}'
         run: |
           echo "Folder being processed: {{ folder.strip() }}"
 {% endfor %}
+{% else %}
+      - name: 'No folders provided'
+        run: echo "No folder input was provided."
+{% endif %}
