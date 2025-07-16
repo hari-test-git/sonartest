@@ -1,23 +1,28 @@
-name: 'Test Folder Strip with Loop'
+name: 'Render Jinja2 Workflow Template'
 
 on:
-  workflow_dispatch:
-    inputs:
-      folders:
-        description: 'Comma-separated list of folders'
-        required: true
-        default: 'src/python/one, python/scripts/two, tests'
+  workflow_dispatch:  # Manual trigger
 
 jobs:
-  folder-loop-test:
+  render:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout'
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-{% for folder in values.folders.split(',') %}
-      - name: 'Echo folder name: {{ folder.strip() }}'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install jinja2-cli
         run: |
-          echo "Folder being processed: {{ folder.strip() }}"
-{% endfor %}
+          pip install jinja2-cli
+
+      - name: Render Jinja2 template
+        run: |
+          jinja2 test.yaml.j2 > folder-test-loop.yaml
+
+      - name: Show rendered output
+        run: cat folder-test-loop.yaml
