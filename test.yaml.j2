@@ -1,22 +1,43 @@
-name: 'Test Folder Strip with Loop'
+name: 'Multi-Folder Mend Scan'
 
 on:
   workflow_dispatch:
 
 jobs:
-  folder-loop-test:
+  mend-scan:
     runs-on: ubuntu-latest
 
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v4
 
-
 {% if folders %}
-{% for folder in folders.split(',') if folder.strip() %}
-      - name: 'Echo folder name: {{ folder.strip() }}'
+{% for entry in folders.split(',') if entry.strip() %}
+{% set parts = entry.strip().split(':') %}
+{% set folder = parts[0].strip() %}
+{% set lang = parts[1].strip() %}
+      - name: 'Setup and Build for {{ folder }} ({{ lang }})'
         run: |
-          echo "Folder being processed: {{ folder.strip() }}"
+{% if lang == "python" %}
+          echo "Setting up Python in {{ folder }}"
+          python -m pip install -r {{ folder }}/requirements.txt
+{% elif lang == "java" %}
+          echo "Building Java in {{ folder }}"
+          cd {{ folder }} && mvn clean install
+{% elif lang == "go" %}
+          echo "Compiling Go in {{ folder }}"
+          cd {{ folder }} && go build .
+{% else %}
+          echo "No setup defined for {{ lang }}"
+{% endif %}
+
+      - name: 'Run Mend SCA Scan - {{ folder }}'
+        run: |
+          echo "Scanning folder {{ folder }} SCA"
+
+      - name: 'Run Mend SAST Scan - {{ folder }}'
+        run: |
+          echo "SAST"
 {% endfor %}
 {% else %}
       - name: 'No folders provided'
