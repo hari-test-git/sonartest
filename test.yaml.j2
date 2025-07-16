@@ -6,16 +6,10 @@ on:
 jobs:
   mend-scan:
     runs-on: ubuntu-latest
-
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v4
-
-{% if folders %}
-{% for entry in folders.split(',') if entry.strip() %}
-{% set parts = entry.strip().split(':') %}
-{% set folder = parts[0].strip() %}
-{% set lang = parts[1].strip() %}
+{% if folders %}{% for entry in folders.split(',') if entry.strip() %}{% set parts = entry.strip().split(':') %}{% set folder = parts[0].strip() %}{% set lang = parts[1].strip() %}
       - name: 'Setup and Build for {{ folder }} ({{ lang }})'
         run: |
 {% if lang == "python" %}
@@ -30,11 +24,9 @@ jobs:
 {% else %}
           echo "No setup defined for {{ lang }}"
 {% endif %}
-
       - name: 'Run Mend SCA Scan - {{ folder }}'
         run: |
           echo "Scanning folder {{ folder }} SCA"
-
       - name: 'Run Mend SAST Scan - {{ folder }}'
         run: |
           echo "SAST"
