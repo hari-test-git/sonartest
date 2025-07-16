@@ -22,7 +22,7 @@ jobs:
 
       - name: Render Jinja2 template
         run: |
-          jinja2 -D folders="src/python/one, python/scripts/two, tests" test.yaml.j2 > folder-test-loop.yaml
+          jinja2 -D test.yaml.j2 > folder-test-loop.yaml
 
       - name: Show rendered output
         run: cat folder-test-loop.yaml
