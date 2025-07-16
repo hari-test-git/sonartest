@@ -16,7 +16,7 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v4
 
-{% for folder in values.folders.split(',') %}
+{% for folder in folders.split(',') %}
       - name: 'Echo folder name: {{ folder.strip() }}'
         run: |
           echo "Folder being processed: {{ folder.strip() }}"
