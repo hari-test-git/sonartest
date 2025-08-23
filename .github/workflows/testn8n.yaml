@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run Task
-        run: echo "Running workflow with message: ${{ inputs.message }}"
+        run: echo "Running workflow with message ${{ inputs.message }}"
       - name: Notify n8n on Completion
         run: |
           curl -X POST ${{ inputs.resumeUrl }} \
