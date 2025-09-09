@@ -1,2 +1,2 @@
 # sonartest
-sample test repo to test dependent github actions workflow
+sample test repo to test dependent github actions workflows
